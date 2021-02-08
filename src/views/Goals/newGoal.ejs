@@ -1,0 +1,60 @@
+<% var title = 'New Goal'; %>
+<%- include('../Components/header', {title: title}); %>
+
+	<!-- Main container -->
+	<div class="container">
+		<!-- Header row -->
+		<div class="row mt-4">
+			<div class="col-12">
+				<!-- Header text -->
+				<h1 class="pl-2">Create a new Goal</h1>
+			</div>
+		</div>
+
+		<!-- Fields row -->
+		<div class="row">
+			<div class="col-12">
+				<!-- Form -->
+				<form class="mt-3 px-4 py-3 border rounded" method="POST">
+					<!-- Goal name -->
+					<label class="pl-1 font-weight-bold">Name</label>
+					<input type="text" name="name" class="form-control" placeholder="Save for college" required>
+
+					<!-- End date -->
+					<label class="mt-4 pl-1 font-weight-bold">End date</label>
+					<input type="date" name="endDate" class="form-control" required>
+
+					<!-- Final objective -->
+					<label class="mt-4 pl-1 font-weight-bold">Final objective</label>
+					
+					<!-- Input -->
+					<div class="input-group">
+						<!-- Simble -->
+						<span class="input-group-text" id="basic-addon1">R$</span>
+						
+						<!-- Field -->
+						<input type="number" min="1" step="any" name="objective" class="form-control" placeholder="50000.00" required>
+					</div>
+
+					<!-- Already have -->
+					<label class="mt-4 pl-1 font-weight-bold">I already have</label>
+					
+					<!-- Input -->
+					<div class="input-group mb-3">
+						<!-- Simble -->
+						<span class="input-group-text" id="basic-addon1">R$</span>
+						
+						<!-- Field -->
+						<input type="number" step="any" name="alreadyHave" class="form-control" value="00.00">
+					</div>
+
+					<!-- Submit button -->
+					<button class="btn btn-outline-success mt-2 pl-1">Create goal</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<%- include('../Components/footer'); %>
+</body>
+</html>

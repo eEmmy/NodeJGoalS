@@ -1,0 +1,99 @@
+<% var title = 'Search Result'; %>
+<%- include('../Components/header', {title: title}); %>
+
+	<!-- Main container -->
+	<div class="container mt-3">
+		<!-- Goals row -->
+		<div class="row">
+			<div class="col-10 d-flex mt-3 justify-content-center mx-auto p-3" id="goalsList">
+			</div>
+		</div>
+	</div>
+
+<%- include('../Components/footer'); %>
+<script type="text/javascript">
+	// Verify if there is any data to render
+	if ('<%= data %>' != 'null') {
+		console.log('<%= data %>');
+		// Get the data
+		var data = '<%= data %>'.replace(/&[^;]*>?/gm, '\"').replace(/;/g, '');
+		
+		// Parse the data
+		data = JSON.parse(data);
+
+		// Stores the table html
+		var goalHTML = "<!-- Goals table -->";
+		goalHTML += "<table class=\"table\">";
+			goalHTML += "<thead>";
+				goalHTML += "<tr>";
+					goalHTML += "<th scope=\"col\">#</th>";
+					goalHTML += "<th scope=\"col\">Name</th>";
+					goalHTML += "<th scope=\"col\">Objective</th>";
+					goalHTML += "<th scope=\"col\">Remaining</th>";
+					goalHTML += "<th scope=\"col\">Status</th>";
+					goalHTML += "<th scope=\"col\">Actions</th>";
+				goalHTML += "</tr>";
+			goalHTML += "</thead>";
+			goalHTML += "<tbody>";
+
+		// Loop in data
+		for (i in data) {
+			// Stores the goal data
+			var goal = data[i];
+
+			// Stores the final objective and the remaining
+			var final_objective = (
+				Number(goal.final_objective) % 1 == 0 ? 
+				goal.final_objective + ',00' : 
+				goal.final_objective
+			);
+			var remaining = (
+				(Number(goal.final_objective) - Number(goal.total)) % 1 == 0 ? 
+				(Number(goal.final_objective) - Number(goal.total)) + ',00' : 
+				(Number(goal.final_objective) - Number(goal.total))
+			);
+
+			if (goal.status !== 1) {
+				// Make the HTML table row
+				goalHTML += "<tr>";
+					goalHTML += `<th scope="row">${goal.id}</th>`;
+					goalHTML += `<td>${goal.name}</td>`;
+					goalHTML += `<td class="text-muted">R$ ${final_objective}</td>`;
+					goalHTML += `<td class="text-muted">R$ ${remaining}</td>`;
+					goalHTML += `<td class="text-muted">Ended in ${goal.end_date}</td>`;
+					goalHTML += "<td></td>";
+				goalHTML += "</tr>";
+			}
+			else {
+				// Make the HTML table row
+				goalHTML += "<tr>";
+					goalHTML += `<th scope="row">${goal.id}</th>`;
+					goalHTML += `<td>${goal.name}</td>`;
+					goalHTML += `<td class="text-danger">R$ ${final_objective}</td>`;
+					goalHTML += `<td class="text-warning">R$ ${remaining}</td>`;
+					goalHTML += `<td class="text-success">Active</td>`;
+					goalHTML += "<td>";
+						goalHTML += `<a href="<%= process.env.APP_URL + "/"%>goal/see/${goal.id}">`;
+							goalHTML += `<span class="badge py-2 px-3 bg-primary">See</span>`;
+						goalHTML += "</a>";
+					goalHTML += "</td>";
+				goalHTML += "</tr>";
+			}
+		}
+
+		// Close the remaining HMTL tags
+		goalHTML += "</tbody></table>";
+
+		// Render the HTML
+		document.querySelector('#goalsList').innerHTML = goalHTML;
+	}
+	else if ('<%= data %>' == 'null') {
+		// Stores the 'No Results' message
+		var goalHTML = '<h1 class="mt-5 text-muted">No matched results for your search</h1>';
+
+		// Render the HTML
+		document.querySelector('#goalsList').innerHTML = goalHTML;
+	}
+</script>
+</body>
+</hmtl>

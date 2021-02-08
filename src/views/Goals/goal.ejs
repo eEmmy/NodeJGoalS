@@ -1,0 +1,346 @@
+<%- include('../Components/header', {title: goal.name}); %>
+
+	<!-- Main container -->
+	<div class="container">
+		<!-- Header row -->
+		<div class="row mt-4">
+			<div class="col-12">
+				
+			</div>
+		</div>
+
+		<!-- Goal data row -->
+		<div class="row">
+			<div class="col-12 p-4 border rounded">
+				<!-- Goal name -->
+				<h1 class="pl-2 pb-2 text-center"><%= goal.name %></h1>
+				
+				<!-- Goal creation data -->
+				<div class="d-flex pb-2 pl-3 justify-content-between border-bottom">
+					<p class="mx-auto"><b>Created by: </b><%= username %></p>
+					<p class="mx-auto"><b>Created at: </b><font id="created_at"></font></p>
+					<p class="mx-auto"><b>Ends at: </b><font id="end_date"></font></p>
+				</div>
+
+				<!-- Progress text -->
+				<h4 class="mt-4 pb-2 text-center">Progress</h4>
+
+				<!--Goal total progress data  -->
+				<div class="d-flex pb-2 pl-3 justify-content-between border-bottom">
+					<!-- Total money -->
+					<h5 class="mx-auto">
+						<b>Total: </b>
+						<font class="text-success" id="total-money">
+							R$<%= goal.total % 1 == 0 ? goal.total + ',00' : goal.total %>
+						</font>
+					</h5>
+
+					<!-- Final Objective -->
+					<h5 class="mx-auto">
+						<b>Objective: </b>
+						<font class="text-danger">
+							R$<%= goal.final_objective % 1 == 0 ? goal.final_objective + ',00' : goal.final_objective %>
+						</font>
+					</h5>
+
+					<!-- Remaining money -->
+					<h5 class="mx-auto">
+						<b>Remaining: </b>
+						<font class="text-warning">
+							R$<%= (goal.final_objective - goal.total) % 1 == 0 ? (goal.final_objective - goal.total) + ',00' : (goal.final_objective - goal.total) %>
+						</font>
+					</h5>
+				</div>
+
+				<!-- History text -->
+				<h4 class="mt-4 pb-2 text-center">History</h4>
+
+				<!-- Goal history -->
+				<div class="d-flex justify-content-center pb-2 pl-3 border-bottom" id="history"></div>
+			</div>
+		</div>
+
+		<!-- Goal actions row -->
+		<div class="row mt-3">
+			<div class="col-12 pl-2 pb-2 mt-5">
+				<!-- Row header text -->
+				<h1 class="pl-2 pb-2 text-left border-bottom">Goal actions</h1>
+
+				<!-- Buttons -->
+				<div class="d-flex mt-3">
+					<!-- Add cash button -->
+					<button class="btn btn-outline-success me-5" data-bs-toggle="modal" data-bs-target="#addCashModal">Add cash</button>
+
+					<!-- Remove cash button -->
+					<button class="btn btn-outline-danger me-5" data-bs-toggle="modal" data-bs-target="#removeCashModal">Remove cash</button>
+					
+					<!-- Edit goal button -->
+					<button class="btn btn-outline-warning me-5" data-bs-toggle="modal" data-bs-target="#editGoalModal">Edit goal</button>
+					
+					<!-- Delete goal button -->
+					<button class="btn btn-outline-danger me-5" data-bs-toggle="modal" data-bs-target="#deleteGoalModal">Delete goal</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Add Cash Modal -->
+	<div class="modal fade" id="addCashModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<!-- Modal header -->
+				<div class="modal-header">
+					<!-- Header text -->
+					<h5 class="modal-title" id="exampleModalLabel">Add cash</h5>
+
+					<!-- Close button -->
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<!-- Form -->
+					<form id="addCashForm" method="POST" action="<%= process.env.APP_URL %>/goal/<%= goal.id %>/add-money">
+						<!-- Amount of money to add -->
+						<div class="input-group">
+							<!-- Simble -->
+							<span class="input-group-text" id="basic-addon1">R$</span>
+						
+							<!-- Field -->
+							<input type="number" class="form-control" min="1" step="any" name="amountToAdd" placeholder="50,00" required>
+						</div>
+						
+						<!-- Buttons -->
+						<div class="mt-4">
+							<!-- Cancel button -->
+							<button type="button" id="addCashCancel" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+
+							<!-- Submit button -->
+							<button type="submit" id="addCashSubmit" class="btn btn-primary">Save changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Remove Cash Modal -->
+	<div class="modal fade" id="removeCashModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<!-- Modal header -->
+				<div class="modal-header">
+					<!-- Header text -->
+					<h5 class="modal-title" id="exampleModalLabel">Remove cash</h5>
+
+					<!-- Close button -->
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<!-- Form -->
+					<form id="removeCashForm" method="POST" action="<%= process.env.APP_URL %>/goal/<%= goal.id %>/remove-money">
+						<!-- Amount of money to remove -->
+						<div class="input-group">
+							<!-- Simble -->
+							<span class="input-group-text" id="basic-addon1">R$</span>
+						
+							<!-- Field -->
+							<input type="number" class="form-control" min="1" step="any" name="amountToRemove" placeholder="50,00" required>
+						</div>
+						
+						<!-- Buttons -->
+						<div class="mt-4">
+							<!-- Cancel button -->
+							<button type="button" id="removeCashCancel" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+
+							<!-- Submit button -->
+							<button type="submit" id="removeCashSubmit" class="btn btn-primary">Save changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Edit goal Modal -->
+	<div class="modal fade" id="editGoalModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<!-- Modal header -->
+				<div class="modal-header">
+					<!-- Header text -->
+					<h5 class="modal-title" id="exampleModalLabel">Edit goal</h5>
+
+					<!-- Close button -->
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<!-- Form -->
+					<form id="editGoalForm" method="POST" action="<%= process.env.APP_URL %>/goal/<%= goal.id %>/edit">
+						<!-- Name -->
+						<input type="text" class="form-control" name="name" placeholder="Name">
+
+						<!-- End date -->
+						<input type="date" name="endDate" class="form-control mt-3">
+
+						<!-- Final Objective -->
+						<div class="input-group mt-3">
+							<!-- Simble -->
+							<span class="input-group-text" id="basic-addon1">R$</span>
+						
+							<!-- Field -->
+							<input type="number" class="form-control" min="1" step="any" name="finalObjective" placeholder="50,00">
+						</div>
+						
+						<!-- Buttons -->
+						<div class="mt-4">
+							<!-- Cancel button -->
+							<button type="button" id="editGoalCancel" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
+
+							<!-- Submit button -->
+							<button type="submit" id="editGoalSubmit" class="btn btn-primary">Save changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Delete Goal Modal -->
+	<div class="modal fade" id="deleteGoalModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<!-- Modal header -->
+				<div class="modal-header">
+					<!-- Header text -->
+					<h5 class="modal-title">Delete Goal</h5>
+
+					<!-- Close button -->
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<h5 class="pl-2">Are you sure to be want delete this goal? This action is irreversible.</h5>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<!-- Cancel button -->
+					<button type="button" id="deleteGoalCancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+					<!-- Submit button -->
+					<a type="button" id="deleteGoalSubmit" class="btn btn-danger" href="<%= process.env.APP_URL %>/goal/<%= goal.id %>/delete">Delete goal</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<%- include('../Components/footer'); %>
+<script type="text/javascript">
+	$(document).ready(function() {
+		// Variables
+		var created_at = new Date('<%- goal.created_at %>');
+		var end_date = new Date('<%- goal.end_date %>');
+		
+		// Convert date to mm/dd/yyyy format
+		created_at =
+			((created_at.getMonth() > 8) ? (created_at.getMonth() + 1) : ('0' + (created_at.getMonth() + 1))) + '/' + 
+			((created_at.getDate() > 9) ? created_at.getDate() : ('0' + created_at.getDate())) + '/' + 
+			created_at.getFullYear();
+
+		end_date = 
+			((end_date.getMonth() > 8) ? (end_date.getMonth() + 1) : ('0' + (end_date.getMonth() + 1))) + '/' + 
+			((end_date.getDate() > 9) ? end_date.getDate() : ('0' + end_date.getDate())) + '/' + 
+			end_date.getFullYear();
+
+		// Put date into page
+		$('#created_at').html(created_at);
+		$('#end_date').html(end_date);
+
+		// Load history progress
+		loadHistoryProgress();
+	});
+
+	// Load history section
+	function loadHistoryProgress() {
+		// Get doc data
+		var doc = <%- goalDoc %>;
+
+		// Verify if the doc has information
+		if (doc !== null) {
+			// Stores the final html
+			var html = "<!-- Table -->";
+			html += "<table class=\"table\">";
+				html += "<thead>";
+					html += "<tr>";
+					    html += "<th scope=\"col\">Added</th>";
+					    html += "<th scope=\"col\">Removed</th>";
+					    html += "<th scope=\"col\">Days</th>";
+					    html += "<th scope=\"col\">Month</th>";
+					    html += "<th scope=\"col\">Year</th>";
+					html += "</tr>";
+				html += "</thead>";
+				html += "<tbody>";
+
+			// Stores the long dates
+			var dates = {
+				days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sunday"],
+				months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+			};
+	
+			// Loop in doc
+			for (y in doc) {
+				// Stores the current year
+				var year = `${y}`;
+
+				// Loop in year
+				for (m in doc[year]) {
+					// Stores the current month
+					var month = `${dates.months[m]}`;
+
+					// Loop in month
+					for (d in doc[y][m]) {
+						// Stores added amount of the day
+						var added = (Number(doc[year][m][d].added) % 1 !== 0 ? 
+							`${doc[year][m][d].added}`.replace('.', ',') : 
+							doc[year][m][d].added + ",00"
+						);
+						
+						// Stores removed amount of the day
+						var removed = (Number(doc[year][m][d].removed) % 1 !== 0 ? 
+							`${doc[year][m][d].removed}`.replace('.', ',') : 
+							doc[year][m][d].removed + ",00"
+						);
+
+						// Make an html table row with the doc data
+						html += "<tr>";
+							html += `<th scope=\"row\" class=\"text-success\">R\$${added}</th>`;
+							html += `<th class=\"text-danger\">R\$${removed}</th>`;
+							html += `<th>${dates.days[doc[year][m][d].weekDay]}, ${d}</th>`;
+							html += `<th>${month}</th>`;
+							html += `<th>${year}</th>`;
+						html += "</tr>";
+					}
+				}
+
+				// Closes the table
+				html += "</tbody>"
+				html += "</table>";
+	
+				// Render the data in html
+				$('#history').html(html);
+			}
+		}
+		else {
+			console.log('doc else');
+		}
+	}
+
+</script>
+</body>
+</html>

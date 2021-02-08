@@ -1,0 +1,57 @@
+<% var title = 'Register'; %>
+<%- include('../Components/header', {title: title, css: ['auth/forms.css']}); %>
+
+	<% if (locals.alert && locals.alert[0] == 'success') { %>
+		<!-- Alert -->
+		<div class="alert alert-success" role="alert">
+			<%= alert[1] %>
+		</div>
+	<% } else if (locals.alert && locals.alert[0] == 'error') { %>
+		<!-- Alert -->
+		<div class="alert alert-danger" role="alert">
+			<%= alert[1] %>
+		</div>
+	<% } %>
+
+	<!-- Main Container -->
+	<div class="container-fluid mt-4">
+		<div class="row">
+			<!-- Register div -->
+			<div class="col-xs-12 col-md-8 col-lg-6 mx-auto border rounded py-3">
+				<!-- Header -->
+				<h1 class="text-center border-bottom">Register</h1>
+
+				<!-- Form -->
+				<form class="p-2 pb-3 mx-auto border-bottom" id="register-form" method="POST">
+					<!-- Text inputs -->
+					<input type="text" name="name" class="form-control mt-2 mx-auto w-75" placeholder="Name" required/>
+					<input type="email" name="email" class="form-control mt-3 mx-auto w-75" placeholder="Email" required/>
+					
+					<!-- Password field -->
+					<div class="d-flex mt-3">
+						<input type="password" name="password" class="form-control w-75 ml-auto" placeholder="Password" id="password-input" required/>
+						<i class="far fa-eye toggle-password py-2 mr-auto"></i>
+					</div>
+
+					<!-- Button -->
+					<div class="mx-auto d-flex">
+						<button class="btn btn-outline-success mx-auto mt-4">Go</button>
+					</div>
+				</form>
+
+				<!-- Footer -->
+				<div class="py-3">
+					<!-- Sign in message -->
+					<p class="text-center">
+						Already have an acount? Then 
+						<a class="text-success" href="<%= process.env.APP_URL %>/login">sign in</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<%- include('../Components/footer'); %>
+	<script src="js/auth/forms.js"></script>
+</body>
+</html>
